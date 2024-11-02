@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Button } from '../components/ui/button';
 import { Link } from 'react-router-dom';
 const Login = () => {
   const {
@@ -22,7 +21,7 @@ const Login = () => {
   return (
     <>
       <div className='p-8'>
-        <h1 className='text-4xl text-center font-sans italic text-white font-bold mb-10 m-4'>Login</h1>
+        <h1 className='text-4xl text-center font-sans italic text-white font-bold mb-10 m-4'>Login to your Xquizite Account</h1>
         <form className='w-1/3 mx-auto space-y-4' onSubmit={handleSubmit(onSubmit)}>
           <div className=''>
             <label className="block text-white text-xl font-mono">Email: </label>

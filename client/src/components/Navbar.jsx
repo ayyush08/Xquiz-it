@@ -1,19 +1,25 @@
 import React from 'react'
 import { Button } from "./ui/button"
-import { Link } from 'react-router-dom'
+import { Link,useLocation } from 'react-router-dom'
 const Navbar = () => {
+    const isUserLoggedIn = true;
+    const location = useLocation();
     return (
         <div className='flex items-center justify-between h-16 w-full p-10 border-b-2 border-opacity-15 border-white'>
             <Link to='/' className='text-4xl font-mono italic font-semibold text-white'>Xquizite</Link>
             <div>
                 <ul className='flex space-x-2'>
-                    <Button variant="outline" asChild>
+                    {!isUserLoggedIn && location.pathname!=='/login' ? <Button variant="outline" asChild>
                         <Link to='/login'>Login</Link>
-                    </Button>
-                    <Button variant="" asChild>
+                    </Button>:null}
+                    {!isUserLoggedIn && location.pathname!=='/signup' ?  <Button variant="" asChild>
                         <Link to='/signup'>SignUp</Link>
-                    </Button>
-
+                    </Button>:null}
+                    {
+                        isUserLoggedIn && location.pathname!='/profile' ? <Button variant="outline" asChild>
+                            <Link to='/profile'>Profile</Link>
+                        </Button> : null
+                    }
                 </ul>
             </div>
         </div>
