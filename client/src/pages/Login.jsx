@@ -37,6 +37,7 @@ const Login = () => {
           <div className="relative">
             <label className="block text-white font-mono text-xl">Password:</label>
             <input
+              placeholder='Enter your password'
               type={passwordVisible ? 'text' : 'password'}
               {...register("password", {
                 required: { value: true, message: 'Password is required' },
