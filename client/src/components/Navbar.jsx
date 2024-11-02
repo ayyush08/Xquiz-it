@@ -1,16 +1,18 @@
 import React from 'react'
-import { buttonVariants } from "@/components/ui/button"
-
-
+import { Button } from "./ui/button"
+import { Link } from 'react-router-dom'
 const Navbar = () => {
     return (
-        <div className='bg-black flex items-center justify-between text-white h-16 w-full p-5'>
-            <h1 className='text-4xl'>Xquisite</h1>
+        <div className='flex items-center justify-between h-16 w-full p-10 border-b-2 border-opacity-15 border-white'>
+            <h1 className='text-4xl font-mono italic font-semibold text-white'>Xquizite</h1>
             <div>
-                <ul className='flex space-x-10'>
-                    <Link className={buttonVariants({ variant: "outline" })}>Login</Link>
-
-                    <li>SignUp</li>
+                <ul className='flex space-x-2'>
+                    <Button variant="outline" asChild>
+                        <Link to='/login'>Login</Link>
+                    </Button>
+                    <Button variant="" asChild>
+                        <Link to='/signup'>SignUp</Link>
+                    </Button>
 
                 </ul>
             </div>
