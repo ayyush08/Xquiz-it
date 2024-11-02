@@ -47,16 +47,16 @@ const Question = () => {
             <h1 className='  mx-auto font-mono text-4xl text-white font-bold mb-10 m-4'>Question 1</h1>
             {
                 selectedOption && (
-                    <div className={`mx-auto p-5 border-[1px] ${isCorrect ? 'border-green-500 bg-green-100' : 'border-red-500 bg-red-100'}  rounded-md`}>
-                        <p className='font-mono text-lg  font-semibold'>{isCorrect ? 'Correct' : 'Wrong'}</p>
-                        <p className='font-mono text-lg font-semibold'>{selectedOption.explanation}</p>
+                    <div className={`mx-auto p-5  w-1/2 ${isCorrect ? 'text-green-500 ' : 'text-red-500 '}  rounded-md`}>
+                        <p className='font-mono text-2xl  font-semibold'>{isCorrect ? 'Correct' : 'Wrong'}</p>
+                        <p className='font-mono text-xl font-semibold'>{selectedOption.explanation}</p>
                     </div>)
             }
             {
                 sampleOptions.map((option,index)=>(
                     <button onClick={()=>checkOption(option)} className={`flex transition-all  border-[1px] ${selectedOption && selectedOption.id == option.id
                         ? option.isCorrect
-                            ? 'border-green-500 border-[3px] bg-green-100' 
+                            ? 'border-green-500 border-[3px] bg-teal-100' 
                             : 'border-red-500 border-[3px] bg-red-100'   
                         : 'border-gray-500 hover:cursor-pointer  text-white'  } ${!selectedOption && 'hover:bg-slate-100/15'}  italic w-1/3 mx-auto  font-mono p-5  h-[4rem] my-4 rounded-md`} key={index}>
                         <p className="text-xl mx-auto font-semibold">
