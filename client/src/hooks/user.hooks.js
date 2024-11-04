@@ -12,7 +12,9 @@ export const useLogin = async (user) => {
 }
 
 export const useLogout = async () => {
-    const response = await API.get('/quizapi/user/logout');
+    const response = await API.post('/quizapi/user/logout');
+    console.log(response);
+    
     return response.data;
 }
 

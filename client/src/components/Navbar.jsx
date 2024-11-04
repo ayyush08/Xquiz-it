@@ -1,13 +1,26 @@
 import React from 'react'
 import { Button } from "./ui/button"
 import { Link,useLocation } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useSelector,useDispatch } from 'react-redux'
+import { persistor } from '../redux/store'
+import { logout } from '../redux/authSlice'
+import { useLogout } from '../hooks/user.hooks'
 const Navbar = () => {
     const isUserLoggedIn = useSelector(state => state.auth.status);
-    
+    const dispatch = useDispatch();
+    console.log(isUserLoggedIn);
 
-    const handleLogout = () => {
-        console.log('Logout');
+    const handleLogout = async() => {    
+        useLogout().then((data) => {
+            console.log(data);
+            if (data) {
+                console.log('Logged out');
+                
+            }
+        });
+        dispatch(logout());
+        persistor.purge();
+        navigate('/')
     }
     const location = useLocation();
     return (
