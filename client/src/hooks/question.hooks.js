@@ -1,7 +1,8 @@
 import axios from "axios";
+import { API } from "../constants.js";
 
 
-export const getQuestionFromPublicAPI = async () => {
+export const useGetQuestionFromAPI = async () => {
     const API_KEY = import.meta.env.VITE_QUIZ_API_KEY
     console.log(API_KEY);
     
@@ -13,12 +14,12 @@ export const getQuestionFromPublicAPI = async () => {
 }
 
 
-const addQuestionToAPI = async (question) => {
-    const response = await axios.post(`${API}/questions/add`, question);
+const useAddQuestion = async (question) => {
+    const response = await API.post('/quizapi/questions/add', question);
     return response.data;
 }
 
-export const getUserQuestions = async () => {
-    const response = await axios.get(`${API}/questions/get-questions`);
+export const useGetUserQuestions = async () => {
+    const response = await API.get('/quizapi/questions/get-questions');
     return response.data;
 }

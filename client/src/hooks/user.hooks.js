@@ -1,18 +1,18 @@
 import axios from "axios";
-import { API } from "src/constants";
+import { API } from "../constants";
 
-export const registerUser = async (user) => {
-    const response = await axios.post(`${API}/user/register`, user);
+export const useRegister = async (user) => {
+    const response = await API.post("/quizapi/user/register", user);
     return response.data;
 }
 
-export const loginUser = async (user) => {
-    const response = await axios.post(`${API}/user/login`, user);
+export const useLogin = async (user) => {
+    const response = await API.post('/quizapi/user/login', user);
     return response.data;
 }
 
-export const logoutUser = async () => {
-    const response = await axios.get(`${API}/user/logout`);
+export const useLogout = async () => {
+    const response = await API.get('/quizapi/user/logout');
     return response.data;
 }
 

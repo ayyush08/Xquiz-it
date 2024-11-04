@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { login } from '../redux/authSlice';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Button } from '../components/ui/button';
-import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { useRegister,useLogin } from '../hooks/user.hooks';
 const SignUp = () => {
   const {
     register,
@@ -11,6 +13,8 @@ const SignUp = () => {
     watch,
     formState: { errors },
   } = useForm()
+  const dispatch = useDispatch();
+  const navigate  = useNavigate();
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   const togglePasswordVisibility = () => {
@@ -18,6 +22,19 @@ const SignUp = () => {
   };
   const onSubmit = async (data) => {
     console.log(data)
+    const registeredUser = await useRegister(data);
+    if(registeredUser){
+      const loginUser = await useLogin({
+        email: data.email,
+        password: data.password
+      });
+      console.log(loginUser.data.user);
+      if(loginUser){
+        dispatch(login(loginUser));
+        navigate('/profile');
+      }
+
+    }
   }
   return (
     <>

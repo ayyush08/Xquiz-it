@@ -1,8 +1,10 @@
 import React from 'react'
 import { Button } from "./ui/button"
 import { Link,useLocation } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 const Navbar = () => {
-    const isUserLoggedIn = true;
+    const isUserLoggedIn = useSelector(state => state.auth.status);
+    
 
     const handleLogout = () => {
         console.log('Logout');
