@@ -22,6 +22,12 @@ const questionSchema = new mongoose.Schema({
         required:true,
         default:false
     },
+    attemptedBy:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'User'
+        }
+    ]
         
 },{
     timestamps:true

@@ -20,12 +20,6 @@ const userSchema = new Schema({
         type:String,
         required:[true,'Password is required'],
     },
-    questions:[
-        {
-            type:Schema.Types.ObjectId,
-            ref:'Question'
-        }
-    ],
     refreshToken:{
         type:String
     }
@@ -64,7 +58,7 @@ userSchema.methods.generateRefreshToken = function(){
         {
             _id:this._id,
         },
-        process.env.REFRESH_TOKEN,
+        process.env.REFRESH_TOKEN_SECRET,
         {
             expiresIn: process.env.REFRESH_TOKEN_EXPIRY
         }

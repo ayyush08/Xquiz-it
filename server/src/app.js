@@ -19,6 +19,10 @@ app.use(express.static('public'))
 app.use(cookieParser())
 
 
+import userRouter from './routes/user.route.js'
+app.use('/quizapi/user',userRouter)
+
+
 
 
 
