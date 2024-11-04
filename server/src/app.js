@@ -23,6 +23,9 @@ import userRouter from './routes/user.route.js'
 app.use('/quizapi/user',userRouter)
 
 
+import questionRouter from './routes/questions.route.js'
+app.use('/quizapi/questions',questionRouter)
+
 
 
 
