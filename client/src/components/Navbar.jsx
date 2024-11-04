@@ -3,6 +3,10 @@ import { Button } from "./ui/button"
 import { Link,useLocation } from 'react-router-dom'
 const Navbar = () => {
     const isUserLoggedIn = true;
+
+    const handleLogout = () => {
+        console.log('Logout');
+    }
     const location = useLocation();
     return (
         <div className='flex items-center justify-between h-16 w-full p-10 border-b-2 border-opacity-15 border-white'>
@@ -19,6 +23,11 @@ const Navbar = () => {
                         isUserLoggedIn && location.pathname!='/profile' ? <Button variant="outline" asChild>
                             <Link to='/profile'>Profile</Link>
                         </Button> : null
+                    }
+                    {
+                        isUserLoggedIn ? <Button onClick={handleLogout} variant="" asChild>
+                            <Link to='/'>Logout</Link>
+                        </Button>: null
                     }
                 </ul>
             </div>
