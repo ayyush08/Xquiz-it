@@ -21,5 +21,7 @@ const useAddQuestion = async (question) => {
 
 export const useGetUserQuestions = async () => {
     const response = await API.get('/quizapi/questions/get-questions');
-    return response.data;
+    if(response){
+        return response.data.data;
+    }
 }

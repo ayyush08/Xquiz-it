@@ -4,8 +4,8 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
 const addQuestion = asyncHandler(async (req, res) => {
-    const { question, answers, correctAnswers, explanation, multipleCorrectAnswers } = req.body;
-    if (!(question || answers || correctAnswers || explanation || multipleCorrectAnswers)) {
+    const { question, options, correctAnswers, explanation,userAnswers, multipleCorrectAnswers } = req.body;
+    if (!(question || options || correctAnswers || explanation || multipleCorrectAnswers|| userAnswers)) {
         throw new ApiError(400, "All fields are required");
     }
 
@@ -16,9 +16,10 @@ const addQuestion = asyncHandler(async (req, res) => {
 
     const newQuestion = await Question.create({
         question,
-        answers,
+        options,
         correctAnswers,
         explanation,
+        userAnswers,
         multipleCorrectAnswers,
         attemptedBy: req.user._id
     });
@@ -54,9 +55,10 @@ const getUserQuestions = asyncHandler(async (req, res) => {
         {
             $project: {
                 question: 1,
-                answers: 1,
+                options: 1,
                 correctAnswers: 1,
                 explanation: 1,
+                userAnswers: 1,
                 multipleCorrectAnswers: 1,
                 userDetails: {
                     _id: 1,

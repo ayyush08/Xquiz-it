@@ -1,8 +1,14 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useLogin } from '../hooks/user.hooks';
+import { useDispatch } from 'react-redux';
+import { login } from '../redux/authSlice';
 const Login = () => {
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {
     register,
     isSubmitting,
@@ -17,6 +23,11 @@ const Login = () => {
   };
   const onSubmit = async (data) => {
     console.log(data)
+    const loggedInUser = await useLogin(data);
+    if(loggedInUser){
+      dispatch(login(loggedInUser));
+      navigate('/profile');
+    }
   }
   return (
     <>

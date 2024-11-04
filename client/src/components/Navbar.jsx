@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button } from "./ui/button"
-import { Link,useLocation } from 'react-router-dom'
+import { Link,useLocation, useNavigate } from 'react-router-dom'
 import { useSelector,useDispatch } from 'react-redux'
 import { persistor } from '../redux/store'
 import { logout } from '../redux/authSlice'
@@ -8,6 +8,7 @@ import { useLogout } from '../hooks/user.hooks'
 const Navbar = () => {
     const isUserLoggedIn = useSelector(state => state.auth.status);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     console.log(isUserLoggedIn);
 
     const handleLogout = async() => {    
