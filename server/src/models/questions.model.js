@@ -6,7 +6,8 @@ const questionSchema = new mongoose.Schema({
         required:true
     },
     options:{
-        type:[String],
+        type:Map,
+        of:String,
         required:true
     },
     correctAnswers: {

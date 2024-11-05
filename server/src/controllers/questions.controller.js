@@ -5,20 +5,17 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 
 const addQuestion = asyncHandler(async (req, res) => {
     const { question, options, correctAnswers, explanation,userAnswers, multipleCorrectAnswers } = req.body;
-    if (!(question || options || correctAnswers || explanation || multipleCorrectAnswers|| userAnswers)) {
+    if (!(question || options || correctAnswers || multipleCorrectAnswers|| userAnswers)) {
         throw new ApiError(400, "All fields are required");
     }
-
-    const checkQuestion = await Question.findOne({ question });
-    if (checkQuestion) {
-        throw new ApiError(409, "Question already exists");
-    }
+    console.log(req.body);
+    
 
     const newQuestion = await Question.create({
         question,
         options,
         correctAnswers,
-        explanation,
+        explanation : explanation || "no explanation provided",
         userAnswers,
         multipleCorrectAnswers,
         attemptedBy: req.user._id

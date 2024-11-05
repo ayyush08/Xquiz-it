@@ -14,7 +14,7 @@ export const useGetQuestionFromAPI = async () => {
 }
 
 
-const useAddQuestion = async (question) => {
+export const useAddQuestion = async (question) => {
     const response = await API.post('/quizapi/questions/add', question);
     return response.data;
 }
