@@ -63,8 +63,11 @@ const getUserQuestions = asyncHandler(async (req, res) => {
                     email: 1,
                     name: 1
                 },
-                createdAt: -1
+                createdAt: 1
             }
+        },
+        {
+            $sort: { createdAt: -1 }
         }
     ])
 
