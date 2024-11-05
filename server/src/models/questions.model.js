@@ -9,13 +9,15 @@ const questionSchema = new mongoose.Schema({
         type:[String],
         required:true
     },
-    correctAnswers:{
-        type:[String],
-        required:true
+    correctAnswers: {
+        type: Map,
+        of: Boolean,
+        required: true
     },
-    userAnswers:{
-        type:[String],
-        required:true
+    userAnswers: {
+        type: Map,
+        of: Boolean,
+        required: true
     },
     explanation:{
         type:String,
