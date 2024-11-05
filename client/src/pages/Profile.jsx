@@ -5,18 +5,31 @@ import { useGetUserQuestions } from '../hooks/question.hooks';
 const Profile = () => {
     const user = useSelector(state => state.auth.userData.data.user);
     const [questions, setQuestions] = useState([]);
+    const [count, setCount] = useState(0);
 
     useEffect(() => {
         const fetchUserQuestions = async () => {
             const userQuestions = await useGetUserQuestions();
             setQuestions(userQuestions);
+            calculateCorrectAnswers(userQuestions);
         }
         fetchUserQuestions();
         
         
     }, [user])
-    const { correct, incorrect } = calculateCorrectAnswers(questions);
 
+    const calculateCorrectAnswers = (questions) => {
+        let count = 0;
+        questions.forEach(quiz => {
+            const { userAnswers, correctAnswers } = quiz;
+            Object.keys(userAnswers).forEach(key => {
+                if (checkOptionFromKey(key, correctAnswers)) {
+                    count++;
+                }
+            });
+        });
+        setCount(count);
+    }
 
     return (
         <div className='p-10'>
@@ -26,31 +39,30 @@ const Profile = () => {
                 <h1 className='text-white text-4xl font-semibold text-center my-2'>No quizzes attempted yet</h1>
             ) : (
                 <div>
-                    <div className='text-xl mt-20 font-semibold text-center my-2'>
-                        <p className='text-green-500'>Correctly Answered Quiz Count: {correct}</p>
-                        <p className='text-red-500'>Incorrectly Answered Quiz Count: {incorrect}</p>
+                    <div className='text-xl mt-10 font-semibold text-center my-2'>
+                        <p className='text-green-500'>Correctly Answered Quiz Count: {count}</p>
+                        <p className='text-red-500'>Incorrectly Answered Quiz Count: {questions.length-count}</p>
                     </div>
                     <h3 className='text-cyan-400 text-3xl my-8 font-mono font-semibold text-center'>Your recently attempted quizzes:</h3>
-                    <div className='flex flex-col space-y-4'>
+                    <div className='flex flex-col space-y-4 '>
                         {questions.map((quiz, index) => {
                             
                             const { question, correctAnswers, userAnswers,options, explanation,createdAt } = quiz;
                             // console.log(userAnswers);
                             return (
-                                <div key={index} className='border-white border-2 p-4 rounded-md shadow-md w-1/2 mx-auto'>
+                                <div key={index} className='border-white border-2 p-4 rounded-md border-r-[14px] border-b-[9px] border-r-orange-600 border-b-orange-600    w-1/2 mx-auto '>
                                     <h3 className='text-xl font-semibold text-white'>{question}</h3>
-                                    <p className='text-lg font-mono text-cyan-300'>Your answers:</p>
+                                    <p className='text-lg font-mono text-cyan-300 flex gap-3 m-2'>{userAnswers.length > 1 ? 'Your Answers' : 'Your Answer'}:
                                     {
                                         Object.keys(userAnswers).map((key, idx) => {
                                             const isCorrect = checkOptionFromKey(key,correctAnswers);
-                                            
                                             return <p key={idx} className={`text-lg font-mono ${isCorrect ? 'text-green-500': 'text-red-500'}`}>{
                                                 getOptionFromKey(key,options) || null
                                             }</p>
 
                                         })
-                                    }
-                                    <p className='text-lg font-mono text-cyan-300'>{correctAnswers.length > 1 ? 'Correct Answers' : 'Correct Answer'}:</p>
+                                    }</p>
+                                    <p className='text-lg font-mono text-cyan-300 flex gap-2 m-2'>{correctAnswers.length > 1 ? 'Correct Answers' : 'Correct Answer'}:
                                     {
                                         Object.keys(correctAnswers).map((key, idx) => (
                                             <p key={idx} className='text-lg font-mono text-green-500'>
@@ -59,12 +71,14 @@ const Profile = () => {
                                                 }
                                             </p>
                                         ))
-                                    }
-                                    <p className='text-lg font-mono text-cyan-300'>Explanation:</p>
+                                    }</p>
+                                    <p className='text-lg font-mono text-cyan-300 flex gap-3 m-2'>Explanation:
+
                                     <p className='text-lg font-mono text-yellow-500'>{explanation}
+                                    </p>
 
                                     </p>
-                                    <p className=' flex text-sm float-end italic font-sans text-purple-400'>Attempted: {moment(createdAt).fromNow()}</p>
+                                    <p className=' flex text-sm float-end italic font-sans text-purple-400'>Attempted {moment(createdAt).fromNow()}</p>
                                 </div>
                             );
                         })}
@@ -77,18 +91,7 @@ const Profile = () => {
 }
 
 
-const calculateCorrectAnswers = (questions) => {
-    let count = 0;
-    for(let i=0; i<questions.length; i++){
-        const { correctAnswers, userAnswers } = questions[i];
-        for(let j=0; j<correctAnswers.length; j++){
-            if(userAnswers.includes(correctAnswers[j])){
-                count++;
-            }
-        }
-    }
-    return { correct: count, incorrect: questions.length - count };
-}
+
 
 
 const getOptionFromKey = (key,options)=>{

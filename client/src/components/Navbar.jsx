@@ -41,6 +41,11 @@ const Navbar = () => {
                         </Button> : null
                     }
                     {
+                        isUserLoggedIn && location.pathname!='/quiz' && location.pathname!='/' ? <Button variant="outline" asChild>
+                            <Link to='/quiz'>Attempt Quiz</Link>
+                        </Button> : null
+                    }
+                    {
                         isUserLoggedIn ? <Button onClick={handleLogout} variant="" asChild>
                             <Link to='/'>Logout</Link>
                         </Button>: null
