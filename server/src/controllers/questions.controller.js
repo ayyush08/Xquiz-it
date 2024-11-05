@@ -62,7 +62,8 @@ const getUserQuestions = asyncHandler(async (req, res) => {
                     username: 1,
                     email: 1,
                     name: 1
-                }
+                },
+                createdAt: -1
             }
         }
     ])
