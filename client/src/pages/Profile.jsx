@@ -13,7 +13,7 @@ const Profile = () => {
         fetchUserQuestions();
         
         
-    }, [])
+    }, [user])
     console.log(questions);
     const { correct, incorrect } = calculateCorrectAnswers(questions);
     const sampleQuestions = [
@@ -55,15 +55,18 @@ const Profile = () => {
                                 <div key={index} className='border-white border-2 p-4 rounded-md shadow-md w-1/2 mx-auto'>
                                     <h3 className='text-xl font-semibold text-white'>{question}</h3>
                                     <p className='text-lg font-mono text-cyan-300'>Your answers:</p>
-                                    {userAnswers.map((answer, idx) => (
-                                        <p key={idx} className={`text-lg font-mono ${correctAnswers.includes(answer) ? 'text-green-500' : 'text-red-500'}`}>
-                                            {answer}
-                                        </p>
-                                    ))}
+                                    {
+                                        Object.keys(userAnswers).map((key, idx) => (
+                                            <p key={idx} className='text-lg font-mono text-red-500'>{userAnswers[key]}</p>
+
+                                        ))
+                                    }
                                     <p className='text-lg font-mono text-cyan-300'>{correctAnswers.length > 1 ? 'Correct Answers' : 'Correct Answer'}:</p>
-                                    {correctAnswers.map((correctAnswer, idx) => (
-                                        <p key={idx} className='text-lg text-green-500 font-mono'>{correctAnswer}</p>
-                                    ))}
+                                    {
+                                        Object.keys(correctAnswers).map((key, idx) => (
+                                            <p key={idx} className='text-lg font-mono text-green-500'>{correctAnswers[key]}</p>
+                                        ))
+                                    }
                                     <p className='text-lg font-mono text-cyan-300'>Explanation:</p>
                                     <p className='text-lg font-mono text-yellow-500'>{explanation}</p>
                                 </div>

@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from './ui/button';
 import { useGetQuestionFromAPI } from '../hooks/question.hooks';
 
@@ -12,39 +12,47 @@ const Question = () => {
         multipleCorrectAnswers: false,
     });
     // console.log(question.options);
-    
+
     const [selectedOption, setSelectedOption] = useState(null);
     const [isCorrect, setIsCorrect] = useState(false);
+    const [isLoaded, setIsLoaded] = useState(false);
 
+    const fetchQuestion = async () => {
+        setIsLoaded(true);
+        const quiz = await useGetQuestionFromAPI();
+        const { question, answers: options, correct_answers: correctAnswers, explanation, multiple_correct_answers: multipleCorrectAnswers } = quiz;
 
+        setQuestion({
+            question: question,
+            options: options,
+            correctAnswers: correctAnswers,
+            userAnswers: [],
+            explanation: explanation,
+            multipleCorrectAnswers: multipleCorrectAnswers
+        });
+        setIsLoaded(false);
+    }
 
     useEffect(() => {
-        const fetchQuestion = async () => {
-            const quiz = await useGetQuestionFromAPI();
-            const { question, answers: options, correct_answers:correctAnswers, explanation, multiple_correct_answers:multipleCorrectAnswers } = quiz;
-            
-            setQuestion({
-                question: question,
-                options: options,
-                correctAnswers: correctAnswers,
-                userAnswers: [],
-                explanation: explanation,
-                multipleCorrectAnswers: multipleCorrectAnswers
-            });
-        }
+
         fetchQuestion();
-    }, [])
- 
-    const checkOption = (option) => {
-        if(selectedOption) return;
-        console.log(option);
+    }, []);
+    if (isLoaded) {
+        return <h1>Loading...</h1>
+    }
+
+
+    const checkOption = (optionKey) => {
+        if (selectedOption) return;
+        console.log(optionKey);
+        setSelectedOption(optionKey);
+        const correctAnswerkey = `${optionKey}_correct`;
+        console.log(correctAnswerkey);
         
-        setQuestion({...question, userAnswers: [...question.userAnswers, option.text]});
-        setSelectedOption(option);
-        const { correctAnswers } = question;
-        const isCorrect = Object.keys(correctAnswers).includes(option);
+        const isCorrect = question.correctAnswers[correctAnswerkey]==='true';
         setIsCorrect(isCorrect);
-        
+        setQuestion({ ...question, userAnswers: [...question.userAnswers, optionKey] });
+
     }
     return (
 
@@ -59,18 +67,24 @@ const Question = () => {
             }
             {
                 question.options && Object.keys(question.options).map((key, index) => {
+                    // console.log(key);
+                    
                     const option = question.options[key];
+
+
                     return (
                         option ?
-                        <button onClick={() => checkOption(option)} className={`flex transition-all  border-[1px] ${selectedOption && selectedOption.id == option.id
-                            ? option.isCorrect
-                                ? 'border-green-500 border-[3px] bg-teal-100'
-                                : 'border-red-500 border-[3px] bg-red-100'
-                            : 'border-gray-500 hover:cursor-pointer  text-white text-wrap'} ${!selectedOption && 'hover:bg-slate-100/15'}  italic w-1/3 mx-auto  font-mono p-5  h-[4rem] my-4 rounded-md`} key={index}>
-                            <p className="text-xl mx-auto font-semibold">
-                                {option}
-                            </p>
-                        </button> : null
+                            <button
+                                key={index}
+                                onClick={() => checkOption(key)} className={`flex transition-all  border-[1px] ${selectedOption && selectedOption == key
+                                    ? isCorrect
+                                        ? 'border-green-500 border-[3px] bg-teal-100'
+                                        : 'border-red-500 border-[3px] bg-red-100'
+                                    : 'border-gray-500 hover:cursor-pointer  text-white '} ${!selectedOption && 'hover:bg-slate-100/15'}  italic w-1/3 max-w-full mx-auto  font-mono p-5  max-h-full my-4 rounded-md`}>
+                                <p className="text-xl text-wrap mx-auto font-semibold break-words text-center">
+                                    {option}
+                                </p>
+                            </button> : null
                     )
                 })
             }

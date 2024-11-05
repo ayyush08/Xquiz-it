@@ -6,7 +6,7 @@ export const useGetQuestionFromAPI = async () => {
     const API_KEY = import.meta.env.VITE_QUIZ_API_KEY
     console.log(API_KEY);
     
-    const question = await axios.get(`https://quizapi.io/api/v1/questions?apiKey=${API_KEY}&limit=1`);
+    const question = await axios.get(`https://quizapi.io/api/v1/questions?apiKey=${API_KEY}&limit=1&difficuly=easy`);
     if(question){
         return question.data[0];
     }
