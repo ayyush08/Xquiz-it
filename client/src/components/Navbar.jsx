@@ -5,6 +5,7 @@ import { useSelector,useDispatch } from 'react-redux'
 import { persistor } from '../redux/store'
 import { logout } from '../redux/authSlice'
 import { useLogout } from '../hooks/user.hooks'
+import toast, { Toaster } from 'react-hot-toast'
 const Navbar = () => {
     const isUserLoggedIn = useSelector(state => state.auth.status);
     const dispatch = useDispatch();
@@ -21,11 +22,14 @@ const Navbar = () => {
         });
         dispatch(logout());
         persistor.purge();
+        toast.success('Logged out successfully');
         navigate('/')
     }
     const location = useLocation();
     return (
+
         <div className='flex items-center justify-between h-16 w-full p-10 border-b-2 border-opacity-15 border-white'>
+            <Toaster />
             <Link to='/' className='text-4xl font-mono italic font-semibold text-white'>Xquizite</Link>
             <div>
                 <ul className='flex space-x-2'>

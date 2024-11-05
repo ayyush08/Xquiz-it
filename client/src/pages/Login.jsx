@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useLogin } from '../hooks/user.hooks';
 import { useDispatch } from 'react-redux';
 import { login } from '../redux/authSlice';
+import toast from 'react-hot-toast';
 const Login = () => {
 
   const dispatch = useDispatch();
@@ -26,6 +27,7 @@ const Login = () => {
     const loggedInUser = await useLogin(data);
     if(loggedInUser){
       dispatch(login(loggedInUser));
+      toast.success('Logged in successfully');
       navigate('/profile');
     }
   }

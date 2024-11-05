@@ -5,6 +5,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { useRegister,useLogin } from '../hooks/user.hooks';
+import toast from 'react-hot-toast';
 const SignUp = () => {
   const {
     register,
@@ -31,6 +32,7 @@ const SignUp = () => {
       console.log(loginUser.data.user);
       if(loginUser){
         dispatch(login(loginUser));
+        toast.success('Account created successfully');
         navigate('/profile');
       }
 
