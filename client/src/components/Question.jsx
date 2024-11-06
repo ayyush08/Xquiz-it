@@ -3,7 +3,9 @@ import { Button } from './ui/button';
 import { useGetQuestionFromAPI,useAddQuestion } from '../hooks/question.hooks';
 import Loader from './Loader';
 import toast, { Toaster } from 'react-hot-toast';
+import { useSelector } from 'react-redux';
 const Question = () => {
+    const isUserLoggedIn = useSelector(state => state.auth.status);
     const [question, setQuestion] = useState({
         question: '',
         options: {},
@@ -37,6 +39,10 @@ const Question = () => {
     }
 
     const handleSaveQuestion = async () => {
+        if(!isUserLoggedIn){
+            toast.error('Please login to save the question');
+            return;
+        }
         if(!selectedOption){
             toast.error('Please attempt the question first');
             return;
