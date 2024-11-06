@@ -6,6 +6,7 @@ import { persistor } from '../redux/store'
 import { logout } from '../redux/authSlice'
 import { useLogout } from '../hooks/user.hooks'
 import toast, { Toaster } from 'react-hot-toast'
+import { appName } from '../constants'
 const Navbar = () => {
     const isUserLoggedIn = useSelector(state => state.auth.status);
     const dispatch = useDispatch();
@@ -30,7 +31,7 @@ const Navbar = () => {
 
         <div className='flex items-center justify-between h-16 w-full p-10 border-b-2 border-opacity-15 border-white'>
             <Toaster />
-            <Link to='/' className='text-4xl font-mono italic font-semibold text-white'>Xquizite</Link>
+            <Link to='/' className='text-4xl font-mono italic font-semibold text-white'>{appName}</Link>
             <div>
                 <ul className='flex space-x-2'>
                     {!isUserLoggedIn && location.pathname!=='/login' ? <Button variant="outline" asChild>

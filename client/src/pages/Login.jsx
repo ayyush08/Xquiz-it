@@ -6,6 +6,7 @@ import { useLogin } from '../hooks/user.hooks';
 import { useDispatch } from 'react-redux';
 import { login } from '../redux/authSlice';
 import toast from 'react-hot-toast';
+import { appName } from '../constants';
 const Login = () => {
 
   const dispatch = useDispatch();
@@ -23,9 +24,10 @@ const Login = () => {
     setPasswordVisible(!passwordVisible);
   };
   const onSubmit = async (data) => {
-    console.log(data)
     const loggedInUser = await useLogin(data);
+    
     if(loggedInUser){
+      console.log(loggedInUser);
       dispatch(login(loggedInUser));
       toast.success('Logged in successfully');
       navigate('/profile');
@@ -34,7 +36,7 @@ const Login = () => {
   return (
     <>
       <div className='p-8'>
-        <h1 className='text-4xl text-center font-sans italic text-white font-bold mb-10 m-4'>Login to your Xquizite Account</h1>
+        <h1 className='text-4xl text-center font-sans italic text-white font-bold mb-10 m-4'>Login to your {appName} Account</h1>
         <form className='w-1/3 mx-auto space-y-4' onSubmit={handleSubmit(onSubmit)}>
           <div className=''>
             <label className="block text-white text-xl font-mono">Email: </label>

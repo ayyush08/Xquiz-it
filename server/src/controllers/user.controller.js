@@ -61,12 +61,14 @@ const loginUser = asyncHandler(async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-        throw new ApiError(402, "User not found");
+        res.status(401).json(new ApiResponse(401, {}, "User not found"));
+        throw new ApiError(401, "User not found");
     }
 
     const isPasswordCorrect = await user.isPasswordCorrect(password);
 
     if (!isPasswordCorrect) {
+
         return res.status(401).json(new ApiResponse(401, {}, "Invalid password"));
     }
 
@@ -124,7 +126,7 @@ const logoutUser = asyncHandler(async (req, res) => {
 const refreshAccessToken = asyncHandler(async (req, res) => {
     const incomingRefreshToken =
         req.cookies.refreshToken || req.body.refreshToken;
-
+    
     if (!incomingRefreshToken) {
         throw new ApiError(401, "Unauthorized request");
     }
@@ -132,19 +134,21 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     try {
         const decodedToken = jwt.verify(
             incomingRefreshToken,
-            process.env.REFRESH_TOKEN
+            process.env.REFRESH_TOKEN_SECRET
         );
 
         const user = await User.findById(decodedToken?._id);
 
         if (!user) {
+            res.status(401).json(new ApiResponse(401, {}, "Invalid refresh token"));
             throw new ApiError(401, "Invalid Refresh Token");
         }
 
         if (incomingRefreshToken !== user?.refreshToken) {
+            res.status(401).json(new ApiResponse(401, {}, "Invalid refresh token"));
             throw new ApiError(401, "Refresh Token is expired or used up");
         }
-        const { accessToken, newRefreshToken } =
+        const { accessToken, refreshToken:newRefreshToken } =
             await generateAccessAndRefreshTokens(user._id);
         res.setHeader("Set-Cookie", [
             `accessToken=${accessToken}; Max-Age=${1 * 24 * 60 * 60}; Path=/; HttpOnly; Secure; SameSite=None`,
@@ -163,7 +167,8 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
                 )
             );
     } catch (error) {
-        throw new ApiError(401, error?.message || "Invalid refresh token");
+        res.status(401).json(new ApiResponse(401, {}, error?.message || 'Invalid Access Token'))
+        throw new ApiError(401, error?.message || 'Invalid Access Token');
     }
 });
 

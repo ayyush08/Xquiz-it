@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { useRegister,useLogin } from '../hooks/user.hooks';
 import toast from 'react-hot-toast';
+import { appName } from '../constants';
 const SignUp = () => {
   const {
     register,
@@ -41,7 +42,7 @@ const SignUp = () => {
   return (
     <>
     <div className='p-8'>
-        <h1 className='text-4xl text-center font-sans italic text-white font-bold mb-10 m-4'>Create an Xquizite Account</h1>
+        <h1 className='text-4xl text-center font-sans italic text-white font-bold mb-10 m-4'>Create an {appName} Account</h1>
         <form className='w-1/3 mx-auto space-y-4' onSubmit={handleSubmit(onSubmit)}>
           <div className=''>
             <label className="block text-white text-xl font-mono">Name: </label>

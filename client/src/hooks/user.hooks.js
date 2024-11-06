@@ -1,5 +1,9 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 import { API } from "../constants";
+import toast from "react-hot-toast";
+
+
 
 export const useRegister = async (user) => {
     const response = await API.post("/quizapi/user/register", user);
@@ -7,14 +11,22 @@ export const useRegister = async (user) => {
 }
 
 export const useLogin = async (user) => {
-    const response = await API.post('/quizapi/user/login', user);
-    return response.data;
+
+    try {
+        const response = await API.post('/quizapi/user/login', user);
+        console.log(response);
+        return response?.data;
+    } catch (error) {
+        if(error?.status === 401){
+            toast.error(error?.response?.data?.message);
+        }
+    }
 }
 
 export const useLogout = async () => {
     const response = await API.post('/quizapi/user/logout');
-    console.log(response);
-    
     return response.data;
 }
+
+
 

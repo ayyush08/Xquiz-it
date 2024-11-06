@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import moment from 'moment';
 import { useGetUserQuestions } from '../hooks/question.hooks';
+import { useNavigate } from 'react-router';
 const Profile = () => {
     const user = useSelector(state => state.auth.userData.data.user);
+    const isUserLoggedIn = useSelector(state => state.auth.status);
     const [questions, setQuestions] = useState([]);
     const [count, setCount] = useState(0);
-
+    const navigate = useNavigate();
     useEffect(() => {
         const fetchUserQuestions = async () => {
             const userQuestions = await useGetUserQuestions();
@@ -52,7 +54,7 @@ const Profile = () => {
                             return (
                                 <div key={index} className='border-white border-2 p-4 rounded-md border-r-[14px] border-b-[9px] border-r-orange-600 border-b-orange-600    w-1/2 mx-auto '>
                                     <h3 className='text-xl font-semibold text-white'>{question}</h3>
-                                    <p className='text-lg font-mono text-cyan-300 flex gap-3 m-2'>{userAnswers.length > 1 ? 'Your Answers' : 'Your Answer'}:
+                                    <div className='text-lg font-mono text-cyan-300 flex gap-3 m-2'>{userAnswers.length > 1 ? 'Your Answers' : 'Your Answer'}:
                                     {
                                         Object.keys(userAnswers).map((key, idx) => {
                                             const isCorrect = checkOptionFromKey(key,correctAnswers);
@@ -61,8 +63,8 @@ const Profile = () => {
                                             }</p>
 
                                         })
-                                    }</p>
-                                    <p className='text-lg font-mono text-cyan-300 flex gap-2 m-2'>{correctAnswers.length > 1 ? 'Correct Answers' : 'Correct Answer'}:
+                                    }</div>
+                                    <div className='text-lg font-mono text-cyan-300 flex gap-2 m-2'>{correctAnswers.length > 1 ? 'Correct Answers' : 'Correct Answer'}:
                                     {
                                         Object.keys(correctAnswers).map((key, idx) => (
                                             <p key={idx} className='text-lg font-mono text-green-500'>
@@ -71,13 +73,13 @@ const Profile = () => {
                                                 }
                                             </p>
                                         ))
-                                    }</p>
-                                    <p className='text-lg font-mono text-cyan-300 flex gap-3 m-2'>Explanation:
+                                    }</div>
+                                    <div className='text-lg font-mono text-cyan-300 flex gap-3 m-2'>Explanation:
 
                                     <p className='text-lg font-mono text-yellow-500'>{explanation}
                                     </p>
 
-                                    </p>
+                                    </div>
                                     <p className=' flex text-sm float-end italic font-sans text-purple-400'>Attempted {moment(createdAt).fromNow()}</p>
                                 </div>
                             );
