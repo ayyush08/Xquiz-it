@@ -6,9 +6,10 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 const addQuestion = asyncHandler(async (req, res) => {
     const { question, options, correctAnswers, explanation,userAnswers, multipleCorrectAnswers } = req.body;
     if (!(question || options || correctAnswers || multipleCorrectAnswers|| userAnswers)) {
+        res.json({ message: "All fields are required" });
         throw new ApiError(400, "All fields are required");
     }
-    console.log(req.body);
+
     
 
     const newQuestion = await Question.create({
@@ -22,6 +23,7 @@ const addQuestion = asyncHandler(async (req, res) => {
     });
 
     if (!newQuestion) {
+        res.json({ message: "Question not created" });
         throw new ApiError(500, "Question not created");
     }
 
@@ -72,6 +74,7 @@ const getUserQuestions = asyncHandler(async (req, res) => {
     ])
 
     if (!questionsAggregate) {
+        res.json({ message: "Questions not found" });
         throw new ApiError(404, "Questions not found");
     }
     return res

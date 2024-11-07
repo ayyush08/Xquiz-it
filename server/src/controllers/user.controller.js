@@ -13,6 +13,7 @@ const generateAccessAndRefreshTokens = async (userId) => {
         await user.save({ validateBeforeSave: false });
         return { accessToken, refreshToken };
     } catch (error) {
+        res.status(500).json(new ApiResponse(500, {}, "Something went wrong while generating access and refresh tokens"));
         throw new ApiError(
             500,
             "Something went wrong while generating access and refresh tokens"
@@ -26,11 +27,13 @@ const registerUser = asyncHandler(async (req, res) => {
     if (
         [name, email, password].some((field) => !field?.trim() === "")
     ) {
+        res.status(400).json(new ApiResponse(400, {}, "All fields are required"));
         throw new ApiError(400, "All fields are required");
     }
 
     const existedUser = await User.findOne({ email });
     if (existedUser) {
+        res.status(409).json(new ApiResponse(409, {}, "User already exists"));
         throw new ApiError(409, "User already exists");
     }
 
@@ -44,6 +47,7 @@ const registerUser = asyncHandler(async (req, res) => {
     const createdUser = await User.findById(user._id).select("-password -refreshToken");
 
     if (!createdUser) {
+        res.status(500).json(new ApiResponse(500, {}, "User not created"));
         throw new ApiError(500, "User not created");
     }
 
@@ -128,6 +132,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
         req.cookies.refreshToken || req.body.refreshToken;
     
     if (!incomingRefreshToken) {
+        res.status(401).json(new ApiResponse(401, {}, "Unauthorized request"));
         throw new ApiError(401, "Unauthorized request");
     }
 
