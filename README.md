@@ -1,6 +1,6 @@
 # 🎈 Xquiz-it - Digital Quiz Platform
 
-**Xquiz-it** is an interactive digital quiz platform that allows users to take quizzes with multiple question types, get instant feedback on answers, and track their progress throughout. Built as part of a **GitHub Student Club** assigned project, Xquiz-it aims to provide an engaging and educational experience for quiz takers.
+**Xquiz-it** is an interactive digital quiz platform that allows users to take quizzes with multiple question types, get instant feedback on answers, and track their progress throughout. Xquiz-it aims to provide an engaging and educational experience for quiz takers.
 
 ## ⛓️‍💥Features
 
