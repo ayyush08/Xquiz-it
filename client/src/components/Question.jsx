@@ -39,12 +39,12 @@ const Question = () => {
     }
 
     const handleSaveQuestion = async () => {
-        if(!selectedOption){
-            toast.error('Please attempt the question first');
-            return;
-        }
         if(!isUserLoggedIn){
             toast.error('Please login to save the question');
+            return;
+        }
+        if(!selectedOption){
+            toast.error('Please attempt the question first');
             return;
         }
         const addedQuestion = await useAddQuestion(question);
@@ -59,7 +59,7 @@ const Question = () => {
     useEffect(() => {
 
         fetchQuestion();
-    }, []);
+    }, [isUserLoggedIn]);
 
     if (isLoaded) {
         return (

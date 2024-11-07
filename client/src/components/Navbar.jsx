@@ -46,7 +46,7 @@ const Navbar = () => {
                         </Button> : null
                     }
                     {
-                        isUserLoggedIn && location.pathname!='/quiz' && location.pathname!='/' ? <Button variant="outline" asChild>
+                        location.pathname!='/quiz' && location.pathname!='/' ? <Button variant="outline" asChild>
                             <Link to='/quiz'>Attempt Quiz</Link>
                         </Button> : null
                     }
