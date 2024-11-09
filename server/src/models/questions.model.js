@@ -5,6 +5,10 @@ const questionSchema = new mongoose.Schema({
         type:String,
         required:true
     },
+    questionId:{
+        type:String,
+        required:true
+    },
     options:{
         type:Map,
         of:String,

@@ -18,16 +18,17 @@ const Question = () => {
     const [selectedOption, setSelectedOption] = useState(null);
     const [isCorrect, setIsCorrect] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
-
+    const [saving,setSaving] = useState(false);
     const fetchQuestion = async () => {
 
         setIsLoaded(true);
         setSelectedOption(null);
         setIsCorrect('');
         const quiz = await useGetQuestionFromAPI();
-        const { question, answers: options, correct_answers: correctAnswers, explanation, multiple_correct_answers: multipleCorrectAnswers } = quiz;
+        const { id:questionId,question, answers: options, correct_answers: correctAnswers, explanation, multiple_correct_answers: multipleCorrectAnswers } = quiz;
 
         setQuestion({
+            questionId: questionId,
             question: question,
             options: options,
             correctAnswers: correctAnswers,
@@ -39,20 +40,33 @@ const Question = () => {
     }
 
     const handleSaveQuestion = async () => {
+        setSaving(true);
         if(!isUserLoggedIn){
             toast.error('Please login to save the question');
+            setSaving(false);
             return;
         }
         if(!selectedOption){
             toast.error('Please attempt the question first');
+            setSaving(false);
             return;
         }
-        const addedQuestion = await useAddQuestion(question);
-        if(addedQuestion){
-            toast.success('Question added successfully');
-            console.log('Question added successfully');
+        try {
+            const addedQuestion = await useAddQuestion(question);
+            console.log(saving);
+            
+            if(addedQuestion && addedQuestion.data){
+                toast.success('Question added successfully');
+                console.log('Question added successfully');
+            }
+            else{
+                toast.error(addedQuestion.message || 'Error adding question');
+            }
+            
+        } catch (error) {
+            toast.error(error.message || 'Error adding question');
         }
-
+        setSaving(false);
         
     }
 
@@ -132,8 +146,9 @@ const Question = () => {
                 onClick={()=>fetchQuestion()}
                 variant='outline' className='mx-auto mt-10 bg-blue-700 text-white hover:bg-blue-800 hover:text-white border-none p-6 text-lg font-mono'>Attempt another</Button>
                 <Button
+                disabled={saving}
                 onClick={()=>handleSaveQuestion()}
-                variant='outline' className='mx-auto mt-10 bg-teal-700 text-white hover:bg-teal-800 hover:text-white border-none p-6 text-lg font-mono'>Save Question</Button>
+                variant='outline' className='mx-auto mt-10 bg-teal-700 text-white hover:bg-teal-800 hover:text-white border-none p-6 text-lg font-mono'>{saving ? 'Saving..' : "Save Question"}</Button>
             </section>
         </div>
     );

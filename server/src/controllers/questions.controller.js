@@ -2,17 +2,25 @@ import { Question } from "../models/questions.model.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
+import mongoose from "mongoose";
 
 const addQuestion = asyncHandler(async (req, res) => {
-    const { question, options, correctAnswers, explanation,userAnswers, multipleCorrectAnswers } = req.body;
+    const { questionId,question, options, correctAnswers, explanation,userAnswers, multipleCorrectAnswers } = req.body;
     if (!(question || options || correctAnswers || multipleCorrectAnswers|| userAnswers)) {
         res.json({ message: "All fields are required" });
         throw new ApiError(400, "All fields are required");
     }
-
+    
+    const questionExists = await Question.find({ questionId: questionId });
+    
+    if (questionExists.length > 0) {
+        res.json(new ApiResponse(400, null, "Question already exists"));
+        throw new ApiError(400, "Question already exists");
+    }
     
 
     const newQuestion = await Question.create({
+        questionId:questionId,
         question,
         options,
         correctAnswers,
@@ -23,7 +31,7 @@ const addQuestion = asyncHandler(async (req, res) => {
     });
 
     if (!newQuestion) {
-        res.json({ message: "Question not created" });
+        res.json(new ApiResponse(500, null, "Question not created"));
         throw new ApiError(500, "Question not created");
     }
 
@@ -54,6 +62,7 @@ const getUserQuestions = asyncHandler(async (req, res) => {
         {
             $project: {
                 question: 1,
+                questionId: 1,
                 options: 1,
                 correctAnswers: 1,
                 explanation: 1,
