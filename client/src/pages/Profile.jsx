@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import moment from 'moment';
+import Loader from '../components/Loader';
 import { useGetUserQuestions } from '../hooks/question.hooks';
 import { useNavigate } from 'react-router';
 const Profile = () => {
@@ -9,11 +10,14 @@ const Profile = () => {
     const [questions, setQuestions] = useState([]);
     const [count, setCount] = useState(0);
     const navigate = useNavigate();
+    const [isLoadingQuestions, setIsLoadingQuestions] = useState(false);
     useEffect(() => {
         const fetchUserQuestions = async () => {
+            setIsLoadingQuestions(true);
             const userQuestions = await useGetUserQuestions();
             setQuestions(userQuestions);
             calculateCorrectAnswers(userQuestions);
+            setIsLoadingQuestions(false);
         }
         fetchUserQuestions();
         
@@ -31,6 +35,12 @@ const Profile = () => {
             });
         });
         setCount(count);
+    }
+
+    if(isLoadingQuestions){
+        return  <div className=' flex justify-center items-center min-w-full min-h-[80vh]'>
+        <Loader />
+    </div>
     }
 
     return (
