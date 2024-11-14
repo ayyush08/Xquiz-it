@@ -5,6 +5,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { useRegister,useLogin } from '../hooks/user.hooks';
+import { Button } from '../components/ui/button';
 import toast from 'react-hot-toast';
 import { appName } from '../constants';
 const SignUp = () => {
@@ -24,21 +25,27 @@ const SignUp = () => {
   };
   const onSubmit = async (data) => {
     setIsLoggingIn(true);
-    console.log(data)
-    const registeredUser = await useRegister(data);
-    if(registeredUser){
-      const loginUser = await useLogin({
-        email: data.email,
-        password: data.password
-      });
-      console.log(loginUser.data.user);
-      if(loginUser){
-        dispatch(login(loginUser));
-        setIsLoggingIn(false);
-        toast.success('Account created successfully');
-        navigate('/profile');
+  try {
+      const registeredUser = await useRegister(data);
+      if(registeredUser){
+        const loginUser = await useLogin({
+          email: data.email,
+          password: data.password
+        });
+        if(loginUser){
+          setIsLoggingIn(false);
+          dispatch(login(loginUser));
+          toast.success('Account created successfully');
+          navigate('/profile');
+        }else{
+          console.log(registeredUser);
+        }
       }
-
+  } catch (error) {
+    console.log(error);
+    
+  }finally{
+      setIsLoggingIn(false);
     }
   }
   return (
@@ -88,12 +95,13 @@ const SignUp = () => {
           </div>
           <div className='flex items-center justify-center'>
 
-            <button
+            <Button
+              disabled={isLoggingIn || isSubmitting}
               type="submit"
               className=" mx-auto text-white bg-orange-700 text-xl px-4 font-mono py-3 rounded-lg hover:bg-orange-800 "
             >
               {isLoggingIn ? 'Creating...' : 'Create Account'}
-            </button>
+            </Button>
           </div>
         </form>
         <div className='text-white text-center mt-16 text-2xl mx-auto'>

@@ -6,8 +6,12 @@ import toast from "react-hot-toast";
 
 
 export const useRegister = async (user) => {
-    const response = await API.post("/quizapi/user/register", user);
-    return response.data;
+    try {
+        const response = await API.post("/quizapi/user/register", user);
+        return response.data;
+    } catch (error) {
+        toast.error(error?.response?.data?.message);
+    }
 }
 
 export const useLogin = async (user) => {

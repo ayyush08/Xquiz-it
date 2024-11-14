@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Button } from '../components/ui/button';
 import { useForm } from 'react-hook-form'
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from 'react-router-dom';
@@ -73,12 +74,13 @@ const Login = () => {
           </div>
           <div className='flex items-center justify-center'>
 
-            <button
+            <Button 
+              disabled={isLoggingIn}
               type="submit"
               className=" mx-auto text-white bg-orange-700 text-xl px-4 font-mono py-3 rounded-lg hover:bg-orange-800 "
             >
               {isLoggingIn ? 'Logging in...' : 'Login'}
-            </button>
+            </Button>
           </div>
         </form>
         <div className='text-white text-center mt-16 text-2xl mx-auto'>
