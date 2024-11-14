@@ -18,11 +18,12 @@ const SignUp = () => {
   const dispatch = useDispatch();
   const navigate  = useNavigate();
   const [passwordVisible, setPasswordVisible] = useState(false);
-
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
   const onSubmit = async (data) => {
+    setIsLoggingIn(true);
     console.log(data)
     const registeredUser = await useRegister(data);
     if(registeredUser){
@@ -33,6 +34,7 @@ const SignUp = () => {
       console.log(loginUser.data.user);
       if(loginUser){
         dispatch(login(loginUser));
+        setIsLoggingIn(false);
         toast.success('Account created successfully');
         navigate('/profile');
       }

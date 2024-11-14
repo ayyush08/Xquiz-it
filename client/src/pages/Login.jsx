@@ -19,16 +19,19 @@ const Login = () => {
     formState: { errors },
   } = useForm()
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
   const onSubmit = async (data) => {
+    setIsLoggingIn(true);
     const loggedInUser = await useLogin(data);
     
     if(loggedInUser){
       console.log(loggedInUser);
       dispatch(login(loggedInUser));
+      setIsLoggingIn(false);
       toast.success('Logged in successfully');
       navigate('/profile');
     }
@@ -74,7 +77,7 @@ const Login = () => {
               type="submit"
               className=" mx-auto text-white bg-orange-700 text-xl px-4 font-mono py-3 rounded-lg hover:bg-orange-800 "
             >
-              {isSubmitting ? 'Logging in...' : 'Login'}
+              {isLoggingIn ? 'Logging in...' : 'Login'}
             </button>
           </div>
         </form>
