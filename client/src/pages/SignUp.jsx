@@ -92,7 +92,7 @@ const SignUp = () => {
               type="submit"
               className=" mx-auto text-white bg-orange-700 text-xl px-4 font-mono py-3 rounded-lg hover:bg-orange-800 "
             >
-              {isSubmitting ? 'Creating...' : 'Create Account'}
+              {isLoggingIn ? 'Creating...' : 'Create Account'}
             </button>
           </div>
         </form>
