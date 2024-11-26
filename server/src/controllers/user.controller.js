@@ -84,11 +84,24 @@ const loginUser = asyncHandler(async (req, res) => {
     const loggedInUser = await User.findById(user._id).select(
         "-password -refreshToken"
     );
-    res.setHeader("Set-Cookie", [
-        `accessToken=${accessToken}; Max-Age=${1 * 24 * 60 * 60}; Path=/; HttpOnly; Secure; SameSite=None`,
-        `refreshToken=${refreshToken}; Max-Age=${15 * 24 * 60 * 60}; Path=/; HttpOnly; Secure; SameSite=None`,
-    ]);
+    // res.setHeader("Set-Cookie", [
+    //     `accessToken=${accessToken}; Max-Age=${1 * 24 * 60 * 60}; Path=/; HttpOnly; Secure; SameSite=None`,
+    //     `refreshToken=${refreshToken}; Max-Age=${15 * 24 * 60 * 60}; Path=/; HttpOnly; Secure; SameSite=None`,
+    // ]);
 
+    res.cookie('accessToken', accessToken, {
+        maxAge: 1 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+        path: '/'
+    }).cookie('refreshToken', refreshToken, {
+        maxAge: 15 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+        path: '/'
+    })
 
     return res
         .status(200)
@@ -117,10 +130,11 @@ const logoutUser = asyncHandler(async (req, res) => {
             new: true,
         }
     );
-    res.setHeader("Set-Cookie", [
-        `accessToken=; Max-Age=0; Path=/; HttpOnly; Secure; SameSite=None`,
-        `refreshToken=; Max-Age=0; Path=/; HttpOnly; Secure; SameSite=None`,
-    ]);
+    // res.setHeader("Set-Cookie", [
+    //     `accessToken=; Max-Age=0; Path=/; HttpOnly; Secure; SameSite=None`,
+    //     `refreshToken=; Max-Age=0; Path=/; HttpOnly; Secure; SameSite=None`,
+    // ]);
+    res.clearCookie('accessToken').clearCookie('refreshToken');
 
 
     return res
@@ -156,10 +170,23 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
         }
         const { accessToken, refreshToken:newRefreshToken } =
             await generateAccessAndRefreshTokens(user._id);
-        res.setHeader("Set-Cookie", [
-            `accessToken=${accessToken}; Max-Age=${1 * 24 * 60 * 60}; Path=/; HttpOnly; Secure; SameSite=None`,
-            `refreshToken=${newRefreshToken}; Max-Age=${15 * 24 * 60 * 60}; Path=/; HttpOnly; Secure; SameSite=None`,
-        ]);
+        // res.setHeader("Set-Cookie", [
+        //     `accessToken=${accessToken}; Max-Age=${1 * 24 * 60 * 60}; Path=/; HttpOnly; Secure; SameSite=None`,
+        //     `refreshToken=${newRefreshToken}; Max-Age=${15 * 24 * 60 * 60}; Path=/; HttpOnly; Secure; SameSite=None`,
+        // ]);
+        res.cookie('accessToken', accessToken, {
+            maxAge: 1 * 24 * 60 * 60 * 1000,
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none',
+            path: '/'
+        }).cookie('refreshToken', newRefreshToken, {
+            maxAge: 15 * 24 * 60 * 60 * 1000,
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none',
+            path: '/'
+        })
 
 
 
