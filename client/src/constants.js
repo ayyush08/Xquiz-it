@@ -21,7 +21,10 @@ const refreshAccessToken = async () => {
 
 
 API.interceptors.response.use(
-    (response) => response,
+    (response) => {
+        console.log("response", response);
+        return response;
+    },
     async (error) => {
         console.log("error occured", error.response.data);
 

@@ -10,6 +10,9 @@ export const verifyJWT = asyncHandler(async (req, res, next) => {
         const token = req.cookies?.accessToken || req.header('Authorization')?.replace('Bearer ', '')
         console.log(token);
         if (!token) {
+            if(!req.cookies?.accessToken){
+                throw new ApiError(401, 'jwt expired')
+            }
             throw new ApiError(401, 'Unauthorized request, token not found')
         }
 
@@ -26,7 +29,6 @@ export const verifyJWT = asyncHandler(async (req, res, next) => {
         next();
     } catch (error) {
         console.log(error);
-        res.status(401).json(new ApiResponse(401, {}, error?.message || 'Invalid Access Token'))
         throw new ApiError(401, error?.message || 'Invalid Access Token');
 
     }

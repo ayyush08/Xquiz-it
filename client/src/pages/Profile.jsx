@@ -23,10 +23,12 @@ const Profile = () => {
         
         
     }, [user])
-
+    console.log(user);
+    
     const calculateCorrectAnswers = (questions) => {
         let count = 0;
-        questions.forEach(quiz => {
+        console.log(questions);
+        questions.map((quiz) => {
             const { userAnswers, correctAnswers } = quiz;
             Object.keys(userAnswers).forEach(key => {
                 if (checkOptionFromKey(key, correctAnswers)) {
