@@ -2,7 +2,8 @@ import { lazy, Suspense } from 'react'
 import { Route,Routes, BrowserRouter as Router } from 'react-router-dom'
 import SharedLayout from './components/SharedLayout'
 import Loader from './components/Loader'
-
+import { useSelector } from 'react-redux'
+import ProtectRoute from './components/ProtectRoute'
 
 
 const Login = lazy(() => import('./pages/Login'))
@@ -17,6 +18,7 @@ const Loading = () => {
             </div>
 }
 function App() {
+  const isUserLoggedIn = useSelector(state => state.auth.status);
 
   return (
     <>
@@ -28,7 +30,9 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/quiz" element={<Questions />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile" element={<ProtectRoute user={isUserLoggedIn} redirect='/' >
+          <Profile />
+        </ProtectRoute>} />
         </Route>
       </Routes>
     </Router>

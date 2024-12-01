@@ -1,7 +1,8 @@
 import axios from "axios";
-
+import store from "./redux/store";
+import toast from "react-hot-toast";
+import { logout } from "./redux/authSlice";
 const BACKEND_URL = import.meta.env.VITE_SERVER_URL;
-
 
 const API = axios.create({
     baseURL: BACKEND_URL,
@@ -42,9 +43,17 @@ API.interceptors.response.use(
                 originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
                 return API(originalRequest);
             } catch (refreshError) {
+                
                 return Promise.reject(refreshError);
+                
             }
         }
+        if(error?.response?.data?.message === "Unauthorized request, token not found"){
+            toast.error("Session expired, please login again");
+            store.dispatch(logout());
+        }
+        console.log("error", error);
+        
         return Promise.reject(error);
     }
 );
