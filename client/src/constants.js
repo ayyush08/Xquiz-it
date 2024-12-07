@@ -13,7 +13,6 @@ const refreshAccessToken = async () => {
     console.log("refresh access token called");
     try {
         const { data } = await API.post("/quizapi/user/refresh-token");
-        console.log(data);
         return data?.data;
     } catch (error) {
         throw error?.response?.data?.error;
