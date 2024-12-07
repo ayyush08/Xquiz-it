@@ -47,7 +47,7 @@ API.interceptors.response.use(
                 
             }
         }
-        if(error?.response?.data?.message === "Unauthorized request, token not found"){
+        if(error?.response?.status === 401){
             toast.error("Session expired, please login again");
             store.dispatch(logout());
         }
